@@ -165,7 +165,7 @@ impl Backend<SimpleInput> for RedisBackend {
             .arg("NX")
             .ignore();
 
-        pipe.query_async(&mut con).await?;
+        pipe.query_async::<()>(&mut con).await?;
 
         Ok(())
     }
@@ -177,7 +177,7 @@ impl SimpleBackend for RedisBackend {
     async fn remove_key(&self, key: &str) -> Result<(), Self::Error> {
         let key = self.make_key(key);
         let mut con = self.connection.clone();
-        con.del(key.as_ref()).await?;
+        con.del::<_, ()>(key.as_ref()).await?;
         Ok(())
     }
 }
